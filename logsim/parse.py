@@ -302,13 +302,13 @@ class Parser:
                 and self.symbol.id == self.scanner.COLON:
             self.symbol = self.scanner.get_symbol()
             self.device()
-            assert (self.symbol.id == self.scanner.HASHTAG
-                    or self.symbol.type == self.scanner.NAME
-                    or self.symbol.id == self.scanner.SEMICOLON)
+            # assert (self.symbol.id == self.scanner.HASHTAG
+            #         or self.symbol.type == self.scanner.NAME
+            #         or self.symbol.id == self.scanner.SEMICOLON)
             # check for inline comment
             if self.symbol.id == self.scanner.HASHTAG:
                 self.comment()
-                assert (self.symbol.type == self.scanner.NAME)
+            #     assert (self.symbol.type == self.scanner.NAME)
             # continue parsing devices until end of devices list reached
             # or until error is discovered
             while self.symbol.id != self.scanner.SEMICOLON:
@@ -322,9 +322,9 @@ class Parser:
                         break
                     else:
                         self.device()
-                        assert (self.symbol.id == self.scanner.HASHTAG
-                                or self.symbol.type == self.scanner.NAME
-                                or self.symbol.id == self.scanner.SEMICOLON)
+                        # assert (self.symbol.id == self.scanner.HASHTAG
+                        #         or self.symbol.type == self.scanner.NAME
+                        #         or self.symbol.id == self.scanner.SEMICOLON)
                 else:
                     break
             # end of devices section reached
@@ -333,7 +333,7 @@ class Parser:
                 # check for comment
                 if self.symbol.id == self.scanner.HASHTAG:
                     self.comment()
-                    assert (self.symbol.id == self.scanner.CONNECTIONS_ID)
+                    # assert (self.symbol.id == self.scanner.CONNECTIONS_ID)
         else:
             self.error("NO_COLON", [(self.scanner.CONNECTIONS_ID, False),
                                     (self.scanner.MONITOR_ID, False)])
@@ -347,13 +347,13 @@ class Parser:
                 and self.symbol.id == self.scanner.COLON:
             self.symbol = self.scanner.get_symbol()
             self.connection()
-            assert (self.symbol.id == self.scanner.HASHTAG
-                    or self.symbol.type == self.scanner.NAME
-                    or self.symbol.id == self.scanner.SEMICOLON)
+            # assert (self.symbol.id == self.scanner.HASHTAG
+            #         or self.symbol.type == self.scanner.NAME
+            #         or self.symbol.id == self.scanner.SEMICOLON)
             # check for comment
             if self.symbol.id == self.scanner.HASHTAG:
                 self.comment()
-                assert (self.symbol.type == self.scanner.NAME)
+                # assert (self.symbol.type == self.scanner.NAME)
             # continue parsing until end of connections list reached
             # or until error in list is discovered
             if self.connection_error is False:
@@ -368,13 +368,13 @@ class Parser:
                             break
                         else:
                             self.connection()
-                            assert (self.symbol.id == self.scanner.HASHTAG
-                                    or self.symbol.type == self.scanner.NAME
-                                    or self.symbol.id == self.scanner.SEMICOLON)
+                            # assert (self.symbol.id == self.scanner.HASHTAG
+                            #         or self.symbol.type == self.scanner.NAME
+                            #         or self.symbol.id == self.scanner.SEMICOLON)
                             # check for comment
                             if self.symbol.id == self.scanner.HASHTAG:
                                 self.comment()
-                                assert (self.symbol.type == self.scanner.NAME)
+                                # assert (self.symbol.type == self.scanner.NAME)
                     else:
                         break
                 # end of connections list reached
@@ -388,9 +388,9 @@ class Parser:
         # check syntax of monitor section
         self.symbol = self.scanner.get_symbol()
         self.output()
-        assert (self.symbol.id == self.scanner.AND
-                or self.symbol.id == self.scanner.COMMA
-                or self.symbol.id == self.scanner.SEMICOLON)
+        # assert (self.symbol.id == self.scanner.AND
+        #         or self.symbol.id == self.scanner.COMMA
+        #         or self.symbol.id == self.scanner.SEMICOLON)
         # make monitor only if no errors have been found
         if self.error_count == 0:
             # make d-type monitor
@@ -418,9 +418,9 @@ class Parser:
                     self.symbol = self.scanner.get_symbol()
                     if self.monitor_error is False:
                         self.output()
-                        assert (self.symbol.id == self.scanner.AND
-                                or self.symbol.id == self.scanner.COMMA
-                                or self.symbol.id == self.scanner.SEMICOLON)
+                        # assert (self.symbol.id == self.scanner.AND
+                        #         or self.symbol.id == self.scanner.COMMA
+                        #         or self.symbol.id == self.scanner.SEMICOLON)
                         # make monitor if no errors found
                         if self.error_count == 0:
                             error_type = self.monitors.make_monitor(self.output_device_id, self.output_id)
@@ -438,7 +438,7 @@ class Parser:
                     # check for comment
                     if self.symbol.id == self.scanner.HASHTAG:
                         self.comment()
-                        assert (self.symbol.type == self.scanner.EOF)
+                        # assert (self.symbol.type == self.scanner.EOF)
                 else:
                     # end of file reached without semicolon
                     # error if no semantic error found
@@ -449,8 +449,8 @@ class Parser:
         """device = name, "is", gate, ";";"""
         # get id of the device and check name syntax
         self.device_id = self.name()
-        assert (self.symbol.id == self.scanner.IS)
-        assert (type(self.device_id) == int)
+        # assert (self.symbol.id == self.scanner.IS)
+        # assert (type(self.device_id) == int)
         # check syntax of device definition
         if self.device_error is False:
             if self.symbol.type == self.scanner.KEYWORD \
@@ -458,8 +458,8 @@ class Parser:
                 self.symbol = self.scanner.get_symbol()
                 # check syntax of gate definition
                 self.gate()
-                assert (self.symbol.id == self.scanner.COMMA
-                        or self.symbol.id == self.scanner.SEMICOLON)
+                # assert (self.symbol.id == self.scanner.COMMA
+                #         or self.symbol.id == self.scanner.SEMICOLON)
                 if self.device_error is False:
                     # check for comma or semicolon
                     if self.symbol.id == self.scanner.COMMA:
@@ -573,12 +573,12 @@ class Parser:
         """connection = output, "to", input;"""
         # check syntax of connection definition
         self.output()
-        assert (self.symbol.id == self.scanner.TO)
+        # assert (self.symbol.id == self.scanner.TO)
         if self.connection_error is False:
             self.symbol = self.scanner.get_symbol()
             self.input()
-            assert (self.symbol.id == self.scanner.COMMA
-                    or self.symbol.id == self.scanner.SEMICOLON)
+            # assert (self.symbol.id == self.scanner.COMMA
+            #         or self.symbol.id == self.scanner.SEMICOLON)
             if self.connection_error is False:
                 # make connection between input and output port
                 # if no syntax errors have been found yet
@@ -644,8 +644,8 @@ class Parser:
         """input = name, ".", (boolean_input | dtype_input);"""
         # get id of input device and check name syntax
         self.input_device_id = self.name()
-        assert (self.symbol.id == self.scanner.FULLSTOP)
-        assert (type(self.input_device_id) == int)
+        # assert (self.symbol.id == self.scanner.FULLSTOP)
+        # assert (type(self.input_device_id) == int)
         # check syntax of input definition
         if self.connection_error is False:
             if self.symbol.type == self.scanner.PUNCTUATION \
@@ -657,8 +657,8 @@ class Parser:
                 if self.symbol.type == self.scanner.NAME \
                         and characters[0] == "I":
                     self.boolean_input()
-                    assert (self.symbol.id == self.scanner.COMMA
-                            or self.symbol.id == self.scanner.SEMICOLON)
+                    # assert (self.symbol.id == self.scanner.COMMA
+                    #         or self.symbol.id == self.scanner.SEMICOLON)
                 # symbol returned for d-type input is DATA, CLK,
                 # SET or CLEAR
                 elif self.symbol.type == self.scanner.KEYWORD \
@@ -667,8 +667,8 @@ class Parser:
                              self.symbol.id == self.scanner.SET or
                              self.symbol.id == self.scanner.CLEAR):
                     self.dtype_input()
-                    assert (self.symbol.id == self.scanner.COMMA
-                            or self.symbol.id == self.scanner.SEMICOLON)
+                    # assert (self.symbol.id == self.scanner.COMMA
+                    #         or self.symbol.id == self.scanner.SEMICOLON)
                 else:
                     self.error("NO_INPUT_TYPE", [(self.scanner.COMMA, False),
                                                  (self.scanner.MONITOR_ID, False)])
