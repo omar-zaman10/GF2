@@ -1,3 +1,5 @@
+#define devices#
+
 DEVICES:
 G1 is AND with 2 inputs,
 G2 is AND with 2 inputs,
@@ -13,7 +15,9 @@ SW4 is SWITCH with state 0,
 SW5 is SWITCH with state 0,
 D1 is DTYPE,
 D2 is DTYPE,
-C1 is CLOCK with 1 cycle period;
+C1 is CLOCK with 10 cycle period;
+
+#define connections#
 
 CONNECTIONS:
 SW2 to G7.I1,
@@ -34,5 +38,7 @@ G5 to G6.I2,
 G6 to D2.DATA,
 C1 to D1.CLK,
 C1 to D2.CLK;
+
+#define monitors#
 
 MONITOR D1.Q and D2.Q;
