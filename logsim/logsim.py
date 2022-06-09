@@ -9,6 +9,7 @@ Usage
 Show help: logsim.py -h
 Command line user interface: logsim.py -c <file path>
 Graphical user interface: logsim.py <file path>
+Debug mode: logsim.py -d <file path>
 """
 import getopt
 import sys
@@ -22,7 +23,7 @@ from monitors import Monitors
 from scanner import Scanner
 from parse import Parser
 from userint import UserInterface
-from gui_main import Gui
+from gui import Gui
 
 
 def main(arg_list):
@@ -34,9 +35,10 @@ def main(arg_list):
     usage_message = ("Usage:\n"
                      "Show help: logsim.py -h\n"
                      "Command line user interface: logsim.py -c <file path>\n"
-                     "Graphical user interface: logsim.py <file path>")
+                     "Graphical user interface: logsim.py <file path>\n"
+                     "Debug mode: logsim.py -d <file path>")
     try:
-        options, arguments = getopt.getopt(arg_list, "hc:")
+        options, arguments = getopt.getopt(arg_list, "hcd:")
     except getopt.GetoptError:
         print("Error: invalid command line arguments\n")
         print(usage_message)
@@ -53,8 +55,17 @@ def main(arg_list):
             print(usage_message)
             sys.exit()
         elif option == "-c":  # use the command line user interface
+            debug = False
             scanner = Scanner(path, names)
-            parser = Parser(names, devices, network, monitors, scanner)
+            parser = Parser(names, devices, network, monitors, scanner, debug)
+            if parser.parse_network():
+                # Initialise an instance of the userint.UserInterface() class
+                userint = UserInterface(names, devices, network, monitors)
+                userint.command_interface()
+        elif option == "-d":  # run the assertion tests
+            debug = True
+            scanner = Scanner(path, names)
+            parser = Parser(names, devices, network, monitors, scanner, debug)
             if parser.parse_network():
                 # Initialise an instance of the userint.UserInterface() class
                 userint = UserInterface(names, devices, network, monitors)
@@ -67,13 +78,15 @@ def main(arg_list):
             print(usage_message)
             sys.exit()
 
+        debug = False
         [path] = arguments
         scanner = Scanner(path, names)
-        parser = Parser(names, devices, network, monitors, scanner)
+        parser = Parser(names, devices, network, monitors, scanner, debug)
         if parser.parse_network():
             # Initialise an instance of the gui.Gui() class
             app = wx.App()
-            gui = gui = Gui("GUI",names, devices, network, monitors)
+            gui = Gui("Logic Simulator", path, names, devices, network,
+                      monitors)
             gui.Show(True)
             app.MainLoop()
 
